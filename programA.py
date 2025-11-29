@@ -20,7 +20,7 @@ addr, port = (url.split('/')[2]).split(':')
 socket = socket(family=AF_INET, type=SOCK_STREAM)
 socket.connect((addr, int(port)))
 
-request = f"GET ./{movie_name}/manifest.txt HTTP/1.0\r\n\r\n"
+request = f'GET ./{movie_name}/manifest.txt HTTP/1.0\r\n\r\n'
 
 socket.send(request.encode())
 
@@ -28,20 +28,20 @@ rcvd_data = socket.recv(buffer_size)
 
 # manifest.txt file download
 
-data = b'' # tmp variable
+tmp = b'' # tmp variable
 
 while rcvd_data:
-    data += rcvd_data
+    tmp += rcvd_data
     rcvd_data = socket.recv(buffer_size)
 
-data_str = data.decode()
-header_end = data_str.find("\r\n\r\n")
+tmp_str = tmp.decode()
+header_end = tmp_str.find("\r\n\r\n")
 
-if not header_end:
+if header_end == -1:
     print("Invalid HTTP")
     exit(1)
 
-content = data_str[header_end + 4:]
+content = tmp_str[header_end + 4:]
 lines = content.split("\n")
 
 with open(results_file_name, "w") as rf:
@@ -49,10 +49,15 @@ with open(results_file_name, "w") as rf:
     num_seg = int(lines[6])
     rf.write(f"{num_tracks}\n{num_seg}\n")
     total = 0
+    movie_header = 2
+    track_header = 5
+    offset = movie_header + track_header
 
     for t in range(num_tracks):
-        for s in range(num_seg):
-            total += int(lines[1 + 6 + s].split(" ")[1])
+        total = 0
+        for s in range(offset, offset + num_seg - 1):
+            total += int(lines[s].split(" ")[1])
         rf.write(f"{total}\n")
+        offset += track_header + num_seg
 
 
