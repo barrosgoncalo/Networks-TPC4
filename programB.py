@@ -20,7 +20,6 @@ def parse_url(url):
 
 
 def send_manifest_request(sck, movie_name):
-    # send manifest request
     request = f"GET ./{movie_name}/manifest.txt HTTP/1.0\r\n\r\n"
     sck.send(request.encode())
 
@@ -34,11 +33,16 @@ def read_full_response(sck):
 
 
 def extract_http_body(response):
+    header_end = fetch_header(response)
+    return response[header_end + 4:]
+
+def fetch_header(response):
     header_end = response.find("\r\n\r\n")
     if header_end == -1:
         print("Invalid HTTP")
         exit(1)
-    return response[header_end + 4:]
+    return header_end
+
 
 def build_request_url(url, movie_name, track_name):
     host, port = parse_url(url)
@@ -65,7 +69,7 @@ def download(segment_start_idx, segment_end_idx, manifest_lines, url):
 def result_file_maker(results_file_name, lines, url, movie_name):
     with open(results_file_name, "w") as rf:
         num_tracks = int(lines[1])
-        num_seg = int(lines[6])
+        num_seg = int(lines[MOVIE_HEADER_SIZE + 5 - 1])
         offset = MOVIE_HEADER_SIZE + TRACK_HEADER_SIZE
         track_name_line = MOVIE_HEADER_SIZE
 
@@ -89,9 +93,7 @@ def main():
 
     arg_validation()
 
-    url = argv[1]
-    movie_name = argv[2]
-    results_file_name = argv[3]
+    _, url, movie_name, results_file_name = argv
 
     with socket(family=AF_INET, type=SOCK_STREAM) as sck:
         # connect to socket

@@ -14,9 +14,9 @@ try:
     # Run a viewer with an appropriate command line. Adapt cmdline according to
     # your operating system and video player
     # Mac example: alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
-    cmdline = '/Applications/VLC.app/Contents/MacOS/VLC --demux h264 -'
+    # cmdline = '/Applications/VLC.app/Contents/MacOS/VLC --demux h264 -'
     # Windows example: cmdline = 'c:/Users/pedro/Bin/MPlayer/mplayer.exe -ni -'
-    # Linux example: cmdline = ‘mplayer –‘
+    cmdline = 'mplayer -'
 
     player = subprocess.Popen(cmdline.split(), stdin=subprocess.PIPE)
 

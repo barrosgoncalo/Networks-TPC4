@@ -13,9 +13,7 @@ def main():
         print("Error: wrong number of arguments")
         exit(1)
 
-    url = argv[1]
-    movie_name = argv[2]
-    results_file_name = argv[3]
+    _, url, movie_name, results_file_name = argv
 
     addr, port = (url.split('/')[2]).split(':')
 
