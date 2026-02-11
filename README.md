@@ -14,7 +14,7 @@ The system follows a multithreaded **Producer-Consumer** architecture to decoupl
 
 ```mermaid
 graph LR
-    Server[Web Server] -- HTTP GET (Range) --> Producer[Producer Thread]
-    Producer -- Chunks --> Buffer[(Queue / Buffer)]
+    Server[Web Server] -- "HTTP GET (Range)" --> Producer[Producer Thread]
+    Producer -- Chunks --> Buffer[("Queue / Buffer")]
     Buffer -- Chunks --> Consumer[Consumer Thread]
-    Consumer -- TCP Socket --> Player[Media Player (VLC/MPlayer)]
+    Consumer -- TCP Socket --> Player["Media Player (VLC/MPlayer)"]
