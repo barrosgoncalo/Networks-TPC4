@@ -1,4 +1,4 @@
-# PyStream-Engine
+# HTTP-Chunk-Streamer
 
 A robust, lightweight video streaming engine built in Python that simulates the core behavior of Content Delivery Networks (CDNs). Ideally suited for understanding application-layer protocols, buffering strategies, and inter-process communication.
 
